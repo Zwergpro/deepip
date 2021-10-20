@@ -1,4 +1,4 @@
-from deepip.main import print_dep_tree
+from deepip.manager import process_command_line
 
 if __name__ == '__main__':
-    print_dep_tree()
+    process_command_line()

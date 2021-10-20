@@ -106,3 +106,9 @@ def simple_print_dep_tree(dep_tree: DependencyTree):
 def print_dep_tree():
     dep_tree = build_requirements_tree()
     simple_print_dep_tree(dep_tree)
+
+
+def print_dep_tree_for_package(package_name: str):
+    dep_tree = build_requirements_tree()
+    package = dep_tree.packages[package_name]
+    package.print_requirement_tree()
