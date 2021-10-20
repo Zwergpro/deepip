@@ -2,18 +2,10 @@ import argparse
 
 import pkg_resources
 
-from deepip.main import print_dep_tree, print_dep_tree_for_package
+from deepip.commands.tree import init_tree_subcommand
 
 
-def tree_command_helper(args):
-    if args.package:
-        print_dep_tree_for_package(args.package)
-        return
-
-    print_dep_tree()
-
-
-def init_main_parser() -> argparse.ArgumentParser:
+def init_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog='deepip', description='Deepip command line tool')
     parser.add_argument(
         '-v',
@@ -24,20 +16,13 @@ def init_main_parser() -> argparse.ArgumentParser:
 
     subparsers = parser.add_subparsers(title='commands', dest='command')
 
-    tree = subparsers.add_parser('tree', description='Show dependency tree', help='Show dependency tree')
-    tree.set_defaults(func=tree_command_helper)
-    tree.add_argument(
-        'package',
-        nargs='?',
-        type=str,
-        help='Package name for showing dependencies',
-    )
+    init_tree_subcommand(subparsers)
 
     return parser
 
 
 def process_command_line():
-    parser = init_main_parser()
+    parser = init_parser()
     args = parser.parse_args()
 
     if args.version:
@@ -49,5 +34,4 @@ def process_command_line():
         print('hello')
         return
 
-    if args.func:
-        args.func(args)
+    args.func(args)
