@@ -1,3 +1,4 @@
+import operator
 import sys
 from typing import Dict
 
@@ -9,6 +10,10 @@ class Requirement:
 
     _package: 'Package'
     _requirement: pkg_resources.Requirement
+
+    @property
+    def name(self):
+        return self._package.name
 
     def __init__(self, requirement: pkg_resources.Requirement, package: 'Package'):
         self._requirement = requirement
@@ -25,7 +30,8 @@ class Requirement:
         else:
             sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
 
-        for require in self._package.requirements.values():
+        requirements = sorted(self._package.requirements.values(), key=operator.attrgetter('name'))
+        for require in requirements:
             require.print_requirement_tree(level + 1)
 
 
@@ -69,7 +75,8 @@ class Package:
         else:
             sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
 
-        for require in self.requirements.values():
+        requirements = sorted(self.requirements.values(), key=operator.attrgetter('name'))
+        for require in requirements:
             require.print_requirement_tree(level + 1)
 
 
@@ -97,7 +104,9 @@ def build_requirements_tree() -> DependencyTree:
 
 
 def simple_print_dep_tree(dep_tree: DependencyTree):
-    for value in dep_tree.values():
+    dependencies = sorted(dep_tree.values(), key=operator.attrgetter('name'))
+
+    for value in dependencies:
         if value.has_parent:
             continue
 
