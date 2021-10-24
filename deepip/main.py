@@ -24,11 +24,13 @@ class Requirement:
         version = f'installed:{self._package.version}'
         return f'{self._requirement.name} [{require}{version}]'
 
-    def print_requirement_tree(self, level: int = 0):
+    def print_requirement_tree(self, level: int = 0, is_last: bool = False):
+        tree_characters = '└── ' if is_last else '├── '
+
         if level == 0:
             sys.stdout.write(f'{self}\n')
         else:
-            sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
+            sys.stdout.write(' ' * 3 * level + tree_characters + str(self) + '\n')
 
         requirements = sorted(self._package.requirements.values(), key=operator.attrgetter('name'))
         for require in requirements:
@@ -69,11 +71,13 @@ class Package:
     def __str__(self) -> str:
         return f'{self.name} [{self.version}]'
 
-    def print_requirement_tree(self, level: int = 0):
+    def print_requirement_tree(self, level: int = 0, is_last: bool = False):
+        tree_characters = '└── ' if is_last else '├── '
+
         if level == 0:
             sys.stdout.write(f'\033[96m{self}\033[0m\n')
         else:
-            sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
+            sys.stdout.write(' ' * 3 * level + tree_characters + str(self) + '\n')
 
         requirements = sorted(self.requirements.values(), key=operator.attrgetter('name'))
         for require in requirements:
