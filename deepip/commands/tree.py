@@ -1,4 +1,4 @@
-from deepip.main import print_dep_tree, print_dep_tree_for_package
+from deepip.main import print_dep_tree_for_package, print_dep_tree_v2
 
 
 def tree_command_handler(args):
@@ -6,7 +6,7 @@ def tree_command_handler(args):
         print_dep_tree_for_package(args.package)
         return
 
-    print_dep_tree()
+    print_dep_tree_v2()
 
 
 def init_tree_subcommand(subparsers):

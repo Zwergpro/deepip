@@ -4,6 +4,8 @@ from typing import Dict
 
 import pkg_resources
 
+from deepip.core.node import build_dep_tree
+
 
 class Requirement:
     """pkg_resources.Requirement wrapper"""
@@ -120,6 +122,11 @@ def simple_print_dep_tree(dep_tree: DependencyTree):
 def print_dep_tree():
     dep_tree = build_requirements_tree()
     simple_print_dep_tree(dep_tree)
+
+
+def print_dep_tree_v2():
+    root = build_dep_tree()
+    root.print_tree()
 
 
 def print_dep_tree_for_package(package_name: str):
