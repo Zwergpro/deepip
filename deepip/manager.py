@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 import pkg_resources
 
@@ -31,7 +32,7 @@ def process_command_line():
         return
 
     if not args.command:
-        print('hello')
-        return
+        parser.print_help()
+        sys.exit(1)
 
     args.func(args)
