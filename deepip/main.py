@@ -1,3 +1,4 @@
+import sys
 from typing import Dict
 
 import pkg_resources
@@ -20,9 +21,9 @@ class Requirement:
 
     def print_requirement_tree(self, level: int = 0):
         if level == 0:
-            print(self)
+            sys.stdout.write(f'{self}\n')
         else:
-            print(' ' * 3 * level + '|-' + str(self))
+            sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
 
         for require in self._package.requirements.values():
             require.print_requirement_tree(level + 1)
@@ -64,9 +65,9 @@ class Package:
 
     def print_requirement_tree(self, level: int = 0):
         if level == 0:
-            print(f'\033[96m{self}\033[0m')
+            sys.stdout.write(f'\033[96m{self}\033[0m\n')
         else:
-            print(' ' * 3 * level + '|-' + str(self))
+            sys.stdout.write(' ' * 3 * level + '|-' + str(self) + '\n')
 
         for require in self.requirements.values():
             require.print_requirement_tree(level + 1)

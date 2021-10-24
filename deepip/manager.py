@@ -28,7 +28,7 @@ def process_command_line():
 
     if args.version:
         version = pkg_resources.working_set.by_key['deepip'].version
-        print(f'deepip {version}')
+        sys.stdout.write(f'deepip {version}\n')
         return
 
     if not args.command:
