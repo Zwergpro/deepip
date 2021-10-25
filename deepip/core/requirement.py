@@ -1,5 +1,8 @@
+from typing import Optional
 
 
-class Requirement:
-    _package = None
+class RequirementInfo:
     _requirement = None
+
+    def __init__(self, requirement: Optional = None):
+        self._requirement = requirement

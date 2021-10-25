@@ -1,12 +1,21 @@
-from deepip.main import print_dep_tree_for_package, print_dep_tree_v2
+import sys
+
+from deepip.core.builders import build_dep_tree
 
 
 def tree_command_handler(args):
-    if args.package:
-        print_dep_tree_for_package(args.package)
-        return
+    root = build_dep_tree()
 
-    print_dep_tree_v2()
+    if args.package:
+        node = root.get_child(args.package)
+        if node:
+            node.print_tree()
+            return
+
+        sys.stdout.write(f'There is no package with name {args.package}\n')
+        sys.exit(1)
+
+    root.print_tree()
 
 
 def init_tree_subcommand(subparsers):

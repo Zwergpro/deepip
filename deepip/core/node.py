@@ -1,44 +1,9 @@
 import operator
 import sys
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional
 
-import pkg_resources
-
-
-class RequirementInfo:
-    _requirement = None
-
-    def __init__(self, requirement=None):
-        self._requirement = requirement
-
-
-class Package:
-    __all_packages: Dict[str, 'Package'] = {}  # global repository for all installed packages
-
-    _package = None
-    ref_counter: int
-
-    def __init__(self, package):
-        self._package = package
-
-        if package.key in self.__all_packages:
-            raise Exception(f'Package {package.key} already exists')
-
-        self.__all_packages[package.key] = self
-        self.ref_counter = 0
-
-    def get_requirements(self) -> List[Tuple['Package', RequirementInfo]]:
-        requirements = []
-        for requirement in self._package.requires():
-            requirements.append((self.__all_packages[requirement.key], RequirementInfo(requirement)))
-        return requirements
-
-    @property
-    def name(self):
-        return self._package.key
-
-    def incr_ref_counter(self):
-        self.ref_counter += 1
+from deepip.core.package import Package
+from deepip.core.requirement import RequirementInfo
 
 
 class DepNode:
@@ -70,6 +35,12 @@ class DepNode:
         child_node.parent = self
         return child_node
 
+    def get_child(self, package_name) -> Optional['DepNode']:
+        for child in self.children:
+            if child.package.name == package_name:
+                return child
+        return None
+
     def print_tree(self, level: int = 0, is_last: bool = False):
         tree_characters = '└── ' if is_last else '├── '
 
@@ -91,25 +62,3 @@ class DepNode:
         requirements = sorted(self.children, key=operator.attrgetter('name'))
         for index, requirement in enumerate(requirements, start=1):
             requirement.print_tree(level=level, is_last=index == len(self.children))
-
-
-def build_sub_tree(root_node: DepNode):
-    requirements = root_node.package.get_requirements()
-    for package, requirement in requirements:
-        node = root_node.add_child(package, RequirementInfo(requirement=requirement))
-        node.parent = root_node
-        build_sub_tree(node)
-
-
-def build_dep_tree() -> DepNode:
-    packages = []
-    for pak in pkg_resources.working_set:
-        packages.append(Package(pak))
-
-    root = DepNode(package=None)
-
-    for package in packages:
-        node = root.add_child(package, RequirementInfo())
-        build_sub_tree(node)
-
-    return root
