@@ -37,6 +37,7 @@ class Package:
 class DepNode:
     _requirement: Optional[RequirementInfo]
     children: List['DepNode']
+    parent: Optional['DepNode']
     package: Package
 
     def __init__(self, requirement: Optional[RequirementInfo] = None):
@@ -84,6 +85,7 @@ def build_sub_tree(root_node: DepNode):
     requirements = root_node._requirement._package.get_requirements()
     for package, requirement in requirements:
         node = root_node.add_child(RequirementInfo(package=package, requirement=requirement))
+        node.parent = root_node
         build_sub_tree(node)
 
 
