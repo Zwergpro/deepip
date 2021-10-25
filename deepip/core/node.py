@@ -7,10 +7,8 @@ import pkg_resources
 
 class RequirementInfo:
     _requirement = None
-    _package = None
 
-    def __init__(self, package=None, requirement=None):
-        self._package = package
+    def __init__(self, requirement=None):
         self._requirement = requirement
 
 
@@ -40,9 +38,9 @@ class DepNode:
     parent: Optional['DepNode']
     package: Package
 
-    def __init__(self, requirement: Optional[RequirementInfo] = None):
+    def __init__(self, package, requirement: Optional[RequirementInfo] = None):
         self._requirement = requirement
-        self.package = requirement._package if requirement is not None else None
+        self.package = package
         self.children = []
 
     @property
@@ -56,8 +54,8 @@ class DepNode:
     def is_root(self) -> bool:
         return self._requirement is None
 
-    def add_child(self, requirement: RequirementInfo) -> 'DepNode':
-        child_node = DepNode(requirement)
+    def add_child(self, package, requirement: RequirementInfo) -> 'DepNode':
+        child_node = DepNode(package, requirement)
         self.children.append(child_node)
         return child_node
 
@@ -82,9 +80,9 @@ class DepNode:
 
 
 def build_sub_tree(root_node: DepNode):
-    requirements = root_node._requirement._package.get_requirements()
+    requirements = root_node.package.get_requirements()
     for package, requirement in requirements:
-        node = root_node.add_child(RequirementInfo(package=package, requirement=requirement))
+        node = root_node.add_child(package, RequirementInfo(requirement=requirement))
         node.parent = root_node
         build_sub_tree(node)
 
@@ -94,10 +92,10 @@ def build_dep_tree() -> DepNode:
     for pak in pkg_resources.working_set:
         packages.append(Package(pak))
 
-    root = DepNode()
+    root = DepNode(package=None)
 
     for package in packages:
-        node = root.add_child(RequirementInfo(package=package))
+        node = root.add_child(package, RequirementInfo())
         build_sub_tree(node)
 
     return root
