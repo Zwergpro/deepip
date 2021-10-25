@@ -16,10 +16,16 @@ class Package:
     __all_packages: Dict[str, 'Package'] = {}
 
     _package = None
+    ref_counter: int
 
     def __init__(self, package):
         self._package = package
+
+        if package.key in self.__all_packages:
+            raise Exception(f'Package {package.key} already exists')
+
         self.__all_packages[package.key] = self
+        self.ref_counter = 1
 
     def get_requirements(self) -> List[Tuple['Package', RequirementInfo]]:
         requirements = []
@@ -30,6 +36,9 @@ class Package:
     @property
     def name(self):
         return self._package.key
+
+    def incr_ref_counter(self):
+        self.ref_counter += 1
 
 
 class DepNode:
@@ -57,6 +66,7 @@ class DepNode:
     def add_child(self, package, requirement: RequirementInfo) -> 'DepNode':
         child_node = DepNode(package, requirement)
         self.children.append(child_node)
+        child_node.package.incr_ref_counter()
         return child_node
 
     def print_tree(self, level: int = 0, is_last: bool = False):
