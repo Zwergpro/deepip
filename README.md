@@ -12,7 +12,9 @@ pip install git+https://github.com/Zwergpro/deepip.git
 
 ---
 #### Show all dependency tree
-![simple usage](docs/usage.png)
+<img alt="simple usage" src="docs/usage.png" width="200"/>
+
 
 #### Show dependency tree for specific package
-![specific package usage](docs/package_arg_usage.png)
+
+<img alt="specific package usage" src="docs/package_arg_usage.png" width="200"/>
