@@ -1,5 +1,6 @@
 import sys
 
+from deepip.core.views import SimpleView
 from deepip.core.builders import build_dep_tree
 
 
@@ -9,13 +10,13 @@ def tree_command_handler(args):
     if args.package:
         node = root.get_child(args.package)
         if node:
-            node.print_tree()
+            SimpleView(node).show()
             return
 
         sys.stdout.write(f'There is no package with name {args.package}\n')
         sys.exit(1)
 
-    root.print_tree()
+    SimpleView(root).show()
 
 
 def init_tree_subcommand(subparsers):

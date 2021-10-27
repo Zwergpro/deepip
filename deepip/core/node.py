@@ -1,5 +1,3 @@
-import operator
-import sys
 from typing import List, Optional
 
 from deepip.core.package import Package
@@ -48,25 +46,3 @@ class DepNode:
             if child.package.name == package_name:
                 return child
         return None
-
-    def print_tree(self, level: int = 0, is_last: bool = False):
-        tree_characters = '└── ' if is_last else '├── '
-
-        if self.is_root:
-            self.print_subtree(level=0)
-            return
-
-        if self.parent.is_root and self.package.ref_counter > 1:
-            return  # don't show packages with several references, they will be showed in subtree
-
-        if level == 0:
-            sys.stdout.write(f'\033[96m{self.name}\033[0m {self.version}\n')
-        else:
-            sys.stdout.write(' ' * 3 * level + tree_characters + self.name + f' {self.version}\n')
-
-        self.print_subtree(level=level + 1)
-
-    def print_subtree(self, level):
-        requirements = sorted(self.children, key=operator.attrgetter('name'))
-        for index, requirement in enumerate(requirements, start=1):
-            requirement.print_tree(level=level, is_last=index == len(self.children))
