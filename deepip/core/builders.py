@@ -21,7 +21,7 @@ def build_dep_tree() -> DepNode:
     root = DepNode(package=None)
 
     for package in packages:
-        node = root.add_child(package, RequirementInfo())
+        node = root.add_child(package)
         build_sub_tree(node)
 
     return root
