@@ -11,6 +11,7 @@ CHILD_OFFSET = ' ' * 3
 
 
 class Color:
+    """Collect color codes and methods for working with it"""
     CEND = '0m'
     CBOLD = '1m'
     CITALIC = '3m'
@@ -57,36 +58,41 @@ class Color:
 
     @staticmethod
     def fill(string: str, color_code: str) -> str:
-        """Set the color design of the string to output to the console"""
+        """Set the color design of the string to console output"""
         return f'\033[{color_code}{string}\033[0m'
 
 
 class SimpleView:
     root_node: DepNode
-    options = None
+    show_version: bool = False
 
-    def __init__(self, root: DepNode, options: Optional = None):
+    def __init__(self, root: DepNode, show_version: bool = False):
         self.root_node = root
-        self.options = options
+        self.show_version = show_version
 
     def show(self):
         """Print dependencies tree"""
         self._print_tree(self.root_node)
 
-    @staticmethod
-    def _print_package_info(node: DepNode) -> None:
+    def _print_package_info(self, node: DepNode) -> None:
         """Print information about package"""
-        name = Color.fill(node.name, Color.CBEIGE2)
-        sys.stdout.write(f'{name} {node.version}\n')
+        information = [Color.fill(node.name, Color.CBEIGE2)]
+        if self.show_version:
+            information.append(node.version)
 
-    @staticmethod
-    def _print_requirement_info(node: DepNode, level: int = 0, is_last: bool = False) -> None:
+        sys.stdout.write(' '.join(information) + '\n')
+
+    def _print_requirement_info(self, node: DepNode, level: int = 0, is_last: bool = False) -> None:
         """Print information about package requirement"""
         tree_character = LAST_NODE_TREE_CHARACTER if is_last else MIDDLE_NODE_TREE_CHARACTER
         offset = CHILD_OFFSET * level
         str_prefix = offset + tree_character
 
-        sys.stdout.write(f'{str_prefix} {node.name} {node.version}\n')
+        information = [str_prefix, node.name]
+        if self.show_version:
+            information.append(node.version)
+
+        sys.stdout.write(' '.join(information) + '\n')
 
     def _print_tree(self, node: DepNode, level: int = 0, is_last: bool = False) -> None:
         """Print information about specified node and all child nodes"""
