@@ -1,6 +1,5 @@
 import operator
 import sys
-from typing import Optional
 
 from deepip.core.node import DepNode
 
