@@ -30,3 +30,7 @@ class Package:
 
     def incr_ref_counter(self):
         self.ref_counter += 1
+
+    @property
+    def version(self) -> str:
+        return self._package.version
