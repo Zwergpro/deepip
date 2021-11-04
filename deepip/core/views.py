@@ -88,7 +88,7 @@ class SimpleView:
         offset = CHILD_OFFSET * level
         str_prefix = offset + tree_character
 
-        information = [str_prefix, node.name]
+        information = [str_prefix, Color.fill(node.name, Color.CBLUE2)]
         if self.show_version:
             information.append(node.version)
 
