@@ -5,8 +5,60 @@ from typing import Optional
 from deepip.core.node import DepNode
 
 
-MIDDLE_NODE_TREE_CHARACTER = '├── '
-LAST_NODE_TREE_CHARACTER = '└── '
+MIDDLE_NODE_TREE_CHARACTER = '├──'
+LAST_NODE_TREE_CHARACTER = '└──'
+CHILD_OFFSET = ' ' * 3
+
+
+class Color:
+    CEND = '0m'
+    CBOLD = '1m'
+    CITALIC = '3m'
+    CURL = '4m'
+    CBLINK = '5m'
+    CBLINK2 = '6m'
+    CSELECTED = '7m'
+
+    CBLACK = '30m'
+    CRED = '31m'
+    CGREEN = '32m'
+    CYELLOW = '33m'
+    CBLUE = '34m'
+    CVIOLET = '35m'
+    CBEIGE = '36m'
+    CWHITE = '37m'
+
+    CBLACKBG = '40m'
+    CREDBG = '41m'
+    CGREENBG = '42m'
+    CYELLOWBG = '43m'
+    CBLUEBG = '44m'
+    CVIOLETBG = '45m'
+    CBEIGEBG = '46m'
+    CWHITEBG = '47m'
+
+    CGREY = '90m'
+    CRED2 = '91m'
+    CGREEN2 = '92m'
+    CYELLOW2 = '93m'
+    CBLUE2 = '94m'
+    CVIOLET2 = '95m'
+    CBEIGE2 = '96m'
+    CWHITE2 = '97m'
+
+    CGREYBG = '100m'
+    CREDBG2 = '101m'
+    CGREENBG2 = '102m'
+    CYELLOWBG2 = '103m'
+    CBLUEBG2 = '104m'
+    CVIOLETBG2 = '105m'
+    CBEIGEBG2 = '106m'
+    CWHITEBG2 = '107m'
+
+    @staticmethod
+    def fill(string: str, color_code: str) -> str:
+        """Set the color design of the string to output to the console"""
+        return f'\033[{color_code}{string}\033[0m'
 
 
 class SimpleView:
@@ -24,13 +76,17 @@ class SimpleView:
     @staticmethod
     def _print_package_info(node: DepNode) -> None:
         """Print information about package"""
-        sys.stdout.write(f'\033[96m{node.name}\033[0m {node.version}\n')
+        name = Color.fill(node.name, Color.CBEIGE2)
+        sys.stdout.write(f'{name} {node.version}\n')
 
     @staticmethod
     def _print_requirement_info(node: DepNode, level: int = 0, is_last: bool = False) -> None:
         """Print information about package requirement"""
         tree_character = LAST_NODE_TREE_CHARACTER if is_last else MIDDLE_NODE_TREE_CHARACTER
-        sys.stdout.write(' ' * 3 * level + tree_character + node.name + f' {node.version}\n')
+        offset = CHILD_OFFSET * level
+        str_prefix = offset + tree_character
+
+        sys.stdout.write(f'{str_prefix} {node.name} {node.version}\n')
 
     def _print_tree(self, node: DepNode, level: int = 0, is_last: bool = False) -> None:
         """Print information about specified node and all child nodes"""
