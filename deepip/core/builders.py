@@ -5,7 +5,8 @@ from deepip.core.package import Package
 from deepip.core.requirement import RequirementInfo
 
 
-def build_sub_tree(root_node: DepNode):
+def build_sub_tree(root_node: DepNode) -> None:
+    """Recursively build dependencies subtree of given node"""
     requirements = root_node.package.get_requirements()
     for package, requirement in requirements:
         node = root_node.add_child(package, RequirementInfo(requirement=requirement))
@@ -14,8 +15,14 @@ def build_sub_tree(root_node: DepNode):
 
 
 def build_dep_tree() -> DepNode:
+    """
+    Build dependencies tree and return root node.
+
+    Depends on pkg_resources module.
+    """
     packages = []
-    for pak in pkg_resources.working_set:
+    working_set = list(pkg_resources.working_set)
+    for pak in working_set:
         packages.append(Package(pak))
 
     root = DepNode(package=None)

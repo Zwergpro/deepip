@@ -1,0 +1,14 @@
+name: linter
+
+on:
+  pull_request:
+
+jobs:
+  pylint:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 -m pip install pylint
+      - run: pylint deepip

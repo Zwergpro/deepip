@@ -5,6 +5,7 @@ from deepip.core.builders import build_dep_tree
 
 
 def tree_command_handler(args):
+    """Handle tree cli command"""
     root = build_dep_tree()
 
     if args.package:
@@ -20,6 +21,7 @@ def tree_command_handler(args):
 
 
 def init_tree_subcommand(subparsers):
+    """Init cli parser for tree command"""
     tree = subparsers.add_parser('tree', description='Show dependency tree', help='Show dependency tree')
     tree.set_defaults(func=tree_command_handler)
     tree.add_argument(

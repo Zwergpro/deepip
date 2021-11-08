@@ -7,6 +7,7 @@ from deepip.commands.tree import init_tree_subcommand
 
 
 def init_parser() -> argparse.ArgumentParser:
+    """Init and return main cli args parser with subparsers"""
     parser = argparse.ArgumentParser(prog='deepip', description='Deepip command line tool')
     parser.add_argument('-V', dest='lib_version', action='store_true', help='Show lib version')
     subparsers = parser.add_subparsers(title='commands', dest='command')
@@ -17,6 +18,7 @@ def init_parser() -> argparse.ArgumentParser:
 
 
 def process_command_line():
+    """Handle cli arguments and give control to command handler"""
     parser = init_parser()
     args = parser.parse_args()
 
