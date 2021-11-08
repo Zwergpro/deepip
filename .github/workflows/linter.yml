@@ -1,10 +1,10 @@
-name: pylint
+name: linter
 
 on:
   pull_request:
 
 jobs:
-  start-pylint:
+  pylint:
     permissions:
       contents: read
     runs-on: ubuntu-latest
