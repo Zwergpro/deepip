@@ -62,6 +62,7 @@ class Color:
 
 
 class SimpleView:
+    """Class for dependencies tree representation"""
     root_node: DepNode
     show_version: bool = False
 
