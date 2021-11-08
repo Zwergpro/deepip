@@ -1,7 +1,13 @@
 name: pylint
-on: [push]
+
+on:
+  push:
+  pull_request:
+
 jobs:
   start-pylint:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
