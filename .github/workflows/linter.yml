@@ -4,6 +4,15 @@ on:
   pull_request:
 
 jobs:
+  black:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 -m pip install black
+      - run: python3 -m black --check --verbose --diff deepip
+
   pylint:
     permissions:
       contents: read
@@ -11,4 +20,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: python3 -m pip install pylint
-      - run: pylint deepip
+      - run: python3 -m pylint deepip
