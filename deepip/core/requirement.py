@@ -7,6 +7,7 @@ class RequirementInfo:
 
     https://setuptools.pypa.io/en/latest/pkg_resources.html#requirement-objects
     """
+
     _requirement = None
 
     def __init__(self, requirement: Optional = None):

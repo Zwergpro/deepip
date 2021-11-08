@@ -11,6 +11,7 @@ CHILD_OFFSET = ' ' * 3
 
 class Color:
     """Collect color codes and methods for working with it"""
+
     CEND = '0m'
     CBOLD = '1m'
     CITALIC = '3m'
@@ -63,6 +64,7 @@ class Color:
 
 class SimpleView:
     """Class for dependencies tree representation"""
+
     root_node: DepNode
     show_version: bool = False
 

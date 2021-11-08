@@ -6,6 +6,7 @@ from deepip.core.requirement import RequirementInfo
 
 class DepNode:
     """Node of dependencies tree"""
+
     package: Package
     requirement: Optional[RequirementInfo]
     children: List['DepNode']

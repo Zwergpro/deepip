@@ -12,6 +12,7 @@ class Package:
 
     https://setuptools.pypa.io/en/latest/pkg_resources.html
     """
+
     __all_packages: Dict[str, 'Package'] = {}  # global repository for all installed packages
 
     _package = None
