@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [0.2.0] - 2021-11-08
 ### Added
 - New project files structure
 - New dependency tree visualization
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command line arg `-v` replace with `-V`
 
 
-## [0.1.0] - 2021-10-31
+## [0.1.0] - 2021-10-25
 ### Added
 - Command line args
 
@@ -31,6 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Old command line interface
 
 
-## [0.0.1] - 2021-10-31
+## [0.0.1] - 2021-10-19
 ### Added
 - Add first implementation of simple package for showing pip dependencies
