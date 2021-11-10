@@ -5,8 +5,6 @@ on:
 
 jobs:
   black:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,8 +12,6 @@ jobs:
       - run: python3 -m black --check --verbose --diff deepip
 
   pylint:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

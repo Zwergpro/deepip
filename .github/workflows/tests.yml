@@ -2,15 +2,12 @@ name: tests
 
 on: 
   workflow_run:
-    workflows: [linter]
-    types:
-      - completed
+    workflows: ["linter"]
+    types: [completed]
 
 
 jobs:
   pytest:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
