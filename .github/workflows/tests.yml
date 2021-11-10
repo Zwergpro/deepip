@@ -1,12 +1,14 @@
 name: tests
 
-on:
-  workflow_success:
-    workflow: linter
+on: 
+  workflow_run:
+    workflows: [linter]
+    types: 
+      - completed
+
 
 jobs:
   pytest:
-    needs: linter
     permissions:
       contents: read
     runs-on: ubuntu-latest
