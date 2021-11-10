@@ -1,6 +1,8 @@
 name: tests
 
-on: 
+on:
+  pull_request:
+  push:
   workflow_run:
     workflows: ["linter"]
     types: [completed]
@@ -10,6 +12,6 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - run: python3 -m pip install pytest
       - run: python3 -m pytest tests
