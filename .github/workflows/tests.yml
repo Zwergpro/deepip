@@ -1,6 +1,8 @@
 name: tests
 
-on: [pull_request]
+on:
+  workflow_success:
+    workflow: linter
 
 jobs:
   pytest:
