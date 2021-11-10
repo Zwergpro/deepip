@@ -3,13 +3,14 @@ name: tests
 on:
   workflow_run:
     workflows: ["linter"]
-    types: [completed]
+    types:
+      - completed
 
 
 jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: python3 -m pip install pytest Faker
       - run: python3 -m pytest tests
