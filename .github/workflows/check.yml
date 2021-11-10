@@ -1,4 +1,4 @@
-name: linter
+name: check
 
 on:
   pull_request:
@@ -18,5 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: python3 -m pip install pylint Faker
+      - run: python3 -m pip install pylint
       - run: python3 -m pylint deepip
+
+  pytest:
+    needs: [black, pylint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 -m pip install pytest Faker
+      - run: python3 -m pytest tests
