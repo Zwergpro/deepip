@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run pytest
-        run: poetry run python -m pytest --no-cov --cov=deepip tests/
+        run: poetry run python -m pytest --cov=deepip tests/
       - name: Coverage report
         run: poetry run python -m coverage report --skip-covered --skip-empty
       - name: Upload coverage to Codecov
