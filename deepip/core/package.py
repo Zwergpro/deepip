@@ -1,7 +1,8 @@
 from typing import Dict, List, Tuple, Optional
 
-from deepip.core.requirement import RequirementInfo
 from pkg_resources import Distribution
+
+from deepip.core.requirement import RequirementInfo
 
 
 class Package:
