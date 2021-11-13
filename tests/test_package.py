@@ -53,6 +53,13 @@ def test_package_name_with_underline():
     assert package.name == test_name.replace('_', '-'), 'package name must not contains underlines'
 
 
+def test_some_packages_with_same_name():
+    package = Package(package_factory())
+
+    with pytest.raises(Exception, match=f'Package {package.name} already exists'):
+        Package(package_factory(project_name=package.name))
+
+
 def test_package_version():
     version = '1.5.0'
     package = Package(package_factory(version=version))
