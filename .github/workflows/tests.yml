@@ -7,24 +7,48 @@ on:
       - master
 
 jobs:
-  black:
+  linters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: python3 -m pip install black
-      - run: python3 -m black --check --verbose --diff deepip
-
-  pylint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: python3 -m pip install pylint
-      - run: python3 -m pylint deepip
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Run poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.11
+      - name: Install dependencies
+        run: poetry install
+      - name: Pylint
+        run: poetry run python -m pylint deepip
+      - name: Black
+        run: poetry run python -m black --check --verbose --diff deepip
 
   pytest:
-    needs: [black, pylint]
+    needs: [linters]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: python3 -m pip install pytest Faker
-      - run: python3 -m pytest tests
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Run poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.11
+      - name: Install dependencies
+        run: poetry install
+      - name: Run pytest
+        run: poetry run python -m pytest --no-cov --cov=deepip tests/
+      - name: Coverage report
+        run: poetry run python -m coverage report --skip-covered --skip-empty
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.DEEPIP_CODECOV }}
+          fail_ci_if_error: true
+          files: ./coverage.xml
+          flags: pytest
+          name: codecov-deepip
+          verbose: true

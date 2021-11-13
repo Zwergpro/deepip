@@ -1,3 +1,20 @@
+[tool.poetry]
+name = "deepip"
+version = "0.2.0"
+description = "Simple pet project for printing python dependency tree"
+authors = ["Nesterenko <nestslock@gmail.com>"]
+license = "MIT License"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+pylint = "^2.11.1"
+black = "^21.10b0"
+pytest-cov = "^3.0.0"
+Faker = "^9.8.1"
+
 [build-system]
 requires = [
     "setuptools>=54",
