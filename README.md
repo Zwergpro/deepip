@@ -1,5 +1,6 @@
 # deepip
 [![tests](https://github.com/Zwergpro/deepip/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/Zwergpro/deepip/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/Zwergpro/deepip/branch/master/graph/badge.svg?token=Z75R2LVGK8)](https://codecov.io/gh/Zwergpro/deepip)
 
 Simple pet project for printing python dependency tree
 
