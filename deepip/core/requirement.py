@@ -8,6 +8,8 @@ class RequirementInfo:
     https://setuptools.pypa.io/en/latest/pkg_resources.html#requirement-objects
     """
 
+    ANY_VERSION = 'Any'
+
     _requirement = None
 
     def __init__(self, requirement: Optional = None):
@@ -16,7 +18,7 @@ class RequirementInfo:
     @property
     def specifier(self) -> str:
         """Return required package version"""
-        return str(self._requirement.specifier)
+        return str(self._requirement.specifier) if self._requirement.specifier else self.ANY_VERSION
 
     def __eq__(self, other: 'RequirementInfo') -> bool:
         """Compare two RequirementInfo objects"""

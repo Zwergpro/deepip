@@ -24,10 +24,8 @@ def package_factory(
 
     if requirements:
         for requirement in requirements:
-            assert (
-                isinstance(requirement, Requirement),
-                'requirements should contains only pkg_resources.Requirement instances',
-            )
+            assert isinstance(requirement, Requirement), \
+                'requirements should contains only pkg_resources.Requirement instances'
         setattr(distribution, '_DistInfoDistribution__dep_map', {None: requirements})
 
     return distribution
