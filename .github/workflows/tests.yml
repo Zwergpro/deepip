@@ -45,6 +45,7 @@ jobs:
       - name: Coverage report
         run: poetry run python -m coverage report --skip-empty
       - name: Upload coverage to Codecov
+        if: github.ref == 'refs/heads/master'
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
