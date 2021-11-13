@@ -1,7 +1,7 @@
 from typing import Optional, Iterable
 
-from pkg_resources import DistInfoDistribution, Requirement
 import faker
+from pkg_resources import DistInfoDistribution, Requirement
 
 fake = faker.Faker()
 faker.Faker.seed(0)

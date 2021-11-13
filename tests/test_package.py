@@ -1,8 +1,8 @@
 import pytest
 
 from deepip.core.package import Package
-from tests.factories.pkg_resources.requirement import requirement_factory
 from tests.factories.pkg_resources.package import package_factory
+from tests.factories.pkg_resources.requirement import requirement_factory
 
 
 @pytest.fixture(scope='function', autouse=True)
