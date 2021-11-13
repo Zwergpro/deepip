@@ -17,3 +17,7 @@ class RequirementInfo:
     def specifier(self) -> str:
         """Return required package version"""
         return str(self._requirement.specifier)
+
+    def __eq__(self, other: 'RequirementInfo') -> bool:
+        """Compare two RequirementInfo objects"""
+        return self._requirement == other._requirement

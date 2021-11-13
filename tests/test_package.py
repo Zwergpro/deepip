@@ -1,6 +1,7 @@
 import pytest
 
 from deepip.core.package import Package
+from deepip.core.requirement import RequirementInfo
 from tests.factories.pkg_resources.package import package_factory
 from tests.factories.pkg_resources.requirement import requirement_factory
 
@@ -73,11 +74,15 @@ def test_package_without_requirements():
     assert package.get_requirements() == [], 'package must not contains requirements'
 
 
-def test_package_get_requirements():
+def test_package_get_several_requirements():
     requirement_packages = [Package(package_factory()), Package(package_factory())]
-    requirements = (requirement_factory(package.name) for package in requirement_packages)
+    row_requirements = [requirement_factory(package.name) for package in requirement_packages]
+    requirements_info = [RequirementInfo(requirement) for requirement in row_requirements]
+    expected_requirements = [
+        (package, requirement)
+        for package, requirement in zip(requirement_packages, requirements_info)
+    ]
 
-    package = Package(package_factory(requirements=requirements))
-    expected_requirements = [(package, requirement) for package, requirement in zip(requirement_packages, requirements)]
+    package = Package(package_factory(requirements=row_requirements))
 
     assert package.get_requirements() == expected_requirements, 'package should contains requirements'
