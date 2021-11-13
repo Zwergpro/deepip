@@ -1,4 +1,6 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
+
+from pkg_resources import Distribution
 
 from deepip.core.requirement import RequirementInfo
 
@@ -15,10 +17,10 @@ class Package:
 
     __all_packages: Dict[str, 'Package'] = {}  # global repository for all installed packages
 
-    _package = None
+    _package: Optional[Distribution] = None
     ref_counter: int
 
-    def __init__(self, package):
+    def __init__(self, package: Distribution):
         self._package = package
 
         if package.key in self.__all_packages:
@@ -35,7 +37,7 @@ class Package:
         return requirements
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return package name"""
         return self._package.key
 
@@ -56,3 +58,13 @@ class Package:
     def version(self) -> str:
         """Return installed package version"""
         return self._package.version
+
+    @classmethod
+    def flush_storage(cls):
+        """Flush global Package storage"""
+        cls.__all_packages = {}
+
+    @classmethod
+    def get_global_storage_copy(cls) -> Dict[str, 'Package']:
+        """Return copy of Package global storage"""
+        return cls.__all_packages.copy()

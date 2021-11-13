@@ -7,12 +7,14 @@ from deepip.core.requirement import RequirementInfo
 class DepNode:
     """Node of dependencies tree"""
 
-    package: Package
+    ROOT_NODE_NAME = 'root_node'
+
     requirement: Optional[RequirementInfo]
     children: List['DepNode']
+    package: Optional[Package] = None
     parent: Optional['DepNode'] = None
 
-    def __init__(self, package, requirement: Optional[RequirementInfo] = None):
+    def __init__(self, package: Optional[Package] = None, requirement: Optional[RequirementInfo] = None):
         self.requirement = requirement
         self.package = package
         self.children = []
@@ -20,7 +22,7 @@ class DepNode:
     @property
     def name(self):
         """Return name of represented package if it's not root node'"""
-        return self.package.name if self.package else ''
+        return self.package.name if not self.is_root else self.ROOT_NODE_NAME
 
     @property
     def version(self) -> str:
@@ -32,11 +34,10 @@ class DepNode:
         if self.requirement is None:
             return f'({self.package.version})'  # top level package
 
-        required = self.requirement.specifier or 'Any'
-        return f'[required: {required}, installed: {self.package.version}]'
+        return f'[required: {self.requirement.specifier}, installed: {self.package.version}]'
 
     def __repr__(self):
-        return 'root_node' if self.is_root else self.name
+        return self.ROOT_NODE_NAME if self.is_root else self.name
 
     @property
     def is_root(self) -> bool:
