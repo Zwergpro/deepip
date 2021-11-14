@@ -20,10 +20,12 @@ jobs:
           poetry-version: 1.1.11
       - name: Install dependencies
         run: poetry install
-      - name: Pylint
+      - name: Pylint deepip
         run: poetry run python -m pylint deepip
+      - name: Pylint tests
+        run: poetry run python -m pylint --disable=C0116,C0115,W0511,W0621,W0212 tests
       - name: Black
-        run: poetry run python -m black --check --verbose --diff deepip
+        run: poetry run python -m black --check --verbose --diff .
 
   pytest:
     needs: [linters]

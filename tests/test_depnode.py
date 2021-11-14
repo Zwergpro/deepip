@@ -93,5 +93,6 @@ def test_node_version_with_requirement_without_version(root):
     child = root.add_child(package, requirement)
     expected_version = f'[required: {requirement.ANY_VERSION}, installed: {package.version}]'
 
-    assert child.version == expected_version, \
-        'node with requirement without version should return only installed versions and Any'
+    assert (
+        child.version == expected_version
+    ), 'node with requirement without version should return only installed versions and Any'

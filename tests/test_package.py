@@ -78,10 +78,7 @@ def test_package_get_several_requirements():
     requirement_packages = [Package(package_factory()), Package(package_factory())]
     row_requirements = [requirement_factory(package.name) for package in requirement_packages]
     requirements_info = [RequirementInfo(requirement) for requirement in row_requirements]
-    expected_requirements = [
-        (package, requirement)
-        for package, requirement in zip(requirement_packages, requirements_info)
-    ]
+    expected_requirements = list(zip(requirement_packages, requirements_info))
 
     package = Package(package_factory(requirements=row_requirements))
 
