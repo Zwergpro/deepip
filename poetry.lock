@@ -16,7 +16,7 @@ wrapt = ">=1.11,<1.14"
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -24,7 +24,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "attrs"
 version = "21.2.0"
 description = "Classes Without Boilerplate"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -78,7 +78,7 @@ importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 name = "colorama"
 version = "0.4.4"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -113,7 +113,7 @@ typing-extensions = {version = ">=3.10.0.2", markers = "python_version < \"3.8\"
 name = "importlib-metadata"
 version = "4.8.2"
 description = "Read metadata from Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -130,7 +130,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -176,7 +176,7 @@ python-versions = "*"
 name = "packaging"
 version = "21.2"
 description = "Core utilities for Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -207,7 +207,7 @@ test = ["appdirs (==1.4.4)", "pytest (>=6)", "pytest-cov (>=2.7)", "pytest-mock 
 name = "pluggy"
 version = "1.0.0"
 description = "plugin and hook calling mechanisms for python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -222,7 +222,7 @@ testing = ["pytest", "pytest-benchmark"]
 name = "py"
 version = "1.11.0"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -247,7 +247,7 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 name = "pyparsing"
 version = "2.4.7"
 description = "Python parsing module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -255,7 +255,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "pytest"
 version = "6.2.5"
 description = "pytest: simple powerful testing with Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -287,6 +287,20 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
+
+[[package]]
+name = "pytest-mock"
+version = "3.6.1"
+description = "Thin-wrapper around the mock package for easier use with pytest"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pytest = ">=5.0"
+
+[package.extras]
+dev = ["pre-commit", "tox", "pytest-asyncio"]
 
 [[package]]
 name = "python-dateutil"
@@ -327,7 +341,7 @@ python-versions = "*"
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -351,7 +365,7 @@ python-versions = ">=3.6"
 name = "typing-extensions"
 version = "3.10.0.2"
 description = "Backported and Experimental Type Hints for Python 3.5+"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -367,7 +381,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 name = "zipp"
 version = "3.6.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -378,7 +392,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "39358eeaa93d052e58376351730358b2a87950388f49fc3d848c5f7702bed79b"
+content-hash = "84efe6861c7bc46fd4d1647d4cc714441c03bf3de3cdd38047b138730603c67b"
 
 [metadata.files]
 astroid = [
@@ -537,6 +551,10 @@ pytest = [
 pytest-cov = [
     {file = "pytest-cov-3.0.0.tar.gz", hash = "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"},
     {file = "pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
+]
+pytest-mock = [
+    {file = "pytest-mock-3.6.1.tar.gz", hash = "sha256:40217a058c52a63f1042f0784f62009e976ba824c418cced42e88d5f40ab0e62"},
+    {file = "pytest_mock-3.6.1-py3-none-any.whl", hash = "sha256:30c2f2cc9759e76eee674b81ea28c9f0b94f8f0445a1b87762cadf774f0df7e3"},
 ]
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
