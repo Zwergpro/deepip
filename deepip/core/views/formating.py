@@ -1,5 +1,3 @@
-
-
 class Color:
     """Collect color codes and methods for working with it"""
 

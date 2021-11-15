@@ -7,6 +7,5 @@ def test_color_fill():
 
     colorful_text = Color.fill(test_text, color_code)
 
-    assert (
-        colorful_text == ''.join((Color.BORDER_START, color_code, test_text, Color.BORDER_END))
-    ), 'formatted text should contain color code and correct borders'
+    expected_string = ''.join((Color.BORDER_START, color_code, test_text, Color.BORDER_END))
+    assert colorful_text == expected_string, 'formatted text should contain color code and correct borders'
