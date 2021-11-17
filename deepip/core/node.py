@@ -8,6 +8,7 @@ from deepip.core.requirement import RequirementInfo
 @dataclass
 class Version:
     """Encapsulate package versions"""
+
     installed: Optional[str] = None
     specifier: Optional[str] = None
     latest: Optional[str] = None
