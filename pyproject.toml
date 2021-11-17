@@ -7,19 +7,21 @@ license = "MIT License"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pytest-mock = "^3.6.1"
+requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 pylint = "^2.11.1"
 black = "^21.10b0"
 pytest-cov = "^3.0.0"
+pytest-mock = "^3.6.1"
 Faker = "^9.8.1"
 
 [build-system]
 requires = [
     "setuptools>=54",
-    "wheel"
+    "wheel",
+    "requests>=2.26.0"
 ]
 build-backend = "setuptools.build_meta"
 
