@@ -32,7 +32,7 @@ class DepNode:
         Top level packages don't have 'parents' and required version, only installed version.
         """
         if self.requirement is None:
-            return f'({self.package.version})'  # top level package
+            return f'({self.package.version} latest: {self.package.latest_version()})'  # top level package
 
         return f'[required: {self.requirement.specifier}, installed: {self.package.version}]'
 

@@ -1,7 +1,9 @@
 from typing import Dict, List, Tuple, Optional
 
+import requests
 from pkg_resources import Distribution
 
+from deepip.core.pypi_api import get_pypi_package_info
 from deepip.core.requirement import RequirementInfo
 
 
@@ -19,6 +21,7 @@ class Package:
 
     _package: Optional[Distribution] = None
     ref_counter: int
+    meta: Optional[dict] = None
 
     def __init__(self, package: Distribution):
         self._package = package
@@ -28,6 +31,22 @@ class Package:
 
         self.__all_packages[package.key] = self
         self.ref_counter = 0
+
+    def load_meta(self) -> None:
+        """Load meta information from remote server"""
+        try:
+            self.meta = get_pypi_package_info(self.name)
+        except requests.exceptions.HTTPError:
+            self.meta = {}
+
+    def latest_version(self) -> Optional[str]:
+        """Return latest version for package"""
+        if self.meta is None:
+            return None
+
+        if self.meta:
+            return self.meta['info']['version']
+        return 'unknown'
 
     def get_requirements(self) -> List[Tuple['Package', RequirementInfo]]:
         """Return all package requirements"""

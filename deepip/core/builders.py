@@ -14,7 +14,7 @@ def build_sub_tree(root_node: DepNode) -> None:
         build_sub_tree(node)
 
 
-def build_dep_tree() -> DepNode:
+def build_dep_tree(with_meta: bool = False) -> DepNode:
     """
     Build dependencies tree and return root node.
 
@@ -23,7 +23,10 @@ def build_dep_tree() -> DepNode:
     packages = []
     working_set = list(pkg_resources.working_set)
     for pak in working_set:
-        packages.append(Package(pak))
+        package = Package(pak)
+        packages.append(package)
+        if with_meta:
+            package.load_meta()
 
     root = DepNode(package=None)
 
