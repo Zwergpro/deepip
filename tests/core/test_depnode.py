@@ -75,24 +75,28 @@ def test_node_version_without_requirement(root):
     package = Package(package_factory(version=version))
     child = root.add_child(package)
 
-    assert child.version == f'({version})', 'node without requirement should return only installed version'
+    version_info = child.get_version()
+
+    assert version_info.installed == version, 'node without requirement should return only installed version'
 
 
 def test_node_version_with_requirement(root):
     package = Package(package_factory())
     requirement = RequirementInfo(requirement_factory())
     child = root.add_child(package, requirement)
-    expected_version = f'[required: {requirement.specifier}, installed: {package.version}]'
 
-    assert child.version == expected_version, 'node with requirement should return only installed and required versions'
+    version_info = child.get_version()
+
+    assert version_info.installed == package.version, 'node should return correct installed version'
+    assert version_info.specifier == requirement.specifier, 'node should return correct required version'
 
 
 def test_node_version_with_requirement_without_version(root):
     package = Package(package_factory())
     requirement = RequirementInfo(requirement_factory(versions=['']))
     child = root.add_child(package, requirement)
-    expected_version = f'[required: {requirement.ANY_VERSION}, installed: {package.version}]'
 
-    assert (
-        child.version == expected_version
-    ), 'node with requirement without version should return only installed versions and Any'
+    version_info = child.get_version()
+
+    assert version_info.installed == package.version, 'node should return correct installed version'
+    assert version_info.specifier == requirement.ANY_VERSION, 'node should return any version'

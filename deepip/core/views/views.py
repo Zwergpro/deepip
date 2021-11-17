@@ -24,11 +24,24 @@ class SimpleView:
         """Print dependencies tree"""
         self._print_tree(self.root_node)
 
+    @staticmethod
+    def get_formatted_version(node: DepNode) -> str:
+        """Return versions in string format"""
+        version = node.get_version()
+
+        if version.specifier is None:
+            if version.latest:
+                return f'({version.installed} latest: {version.latest})'  # top level package
+            return f'({version.installed})'
+
+        version_info = ', '.join(f'{key}: {value}' for key, value in version.as_dict().items())
+        return f'[{version_info}]'
+
     def _print_package_info(self, node: DepNode) -> None:
         """Print information about package"""
         information = [Color.fill(node.name, Color.CBEIGE2)]
         if self.show_version:
-            information.append(node.version)
+            information.append(self.get_formatted_version(node))
 
         sys.stdout.write(' '.join(information) + '\n')
 
@@ -40,7 +53,7 @@ class SimpleView:
 
         information = [str_prefix, Color.fill(node.name, Color.CBLUE2)]
         if self.show_version:
-            information.append(node.version)
+            information.append(self.get_formatted_version(node))
 
         sys.stdout.write(' '.join(information) + '\n')
 
