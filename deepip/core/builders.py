@@ -1,5 +1,6 @@
 import pkg_resources
 
+from deepip.core.api.pypi_api import get_package_meta
 from deepip.core.node import DepNode
 from deepip.core.package import Package
 from deepip.core.requirement import RequirementInfo
@@ -26,7 +27,7 @@ def build_dep_tree(with_meta: bool = False) -> DepNode:
         package = Package(pak)
         packages.append(package)
         if with_meta:
-            package.load_meta()
+            package.meta = get_package_meta(package.name)
 
     root = DepNode(package=None)
 

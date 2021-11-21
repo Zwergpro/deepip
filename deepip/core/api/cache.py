@@ -1,4 +1,5 @@
 import time
+from contextlib import suppress
 from pathlib import Path
 import json
 from typing import Optional
@@ -28,15 +29,14 @@ class Cache:
 
     __item: Optional['Cache'] = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, path: Optional[Path] = None, expire: Optional[int] = None):
         if cls.__item is None:
-            cls.__item = super().__new__(cls, *args, **kwargs)
-        return cls.__item
+            cls.__item = super().__new__(cls)
+            cls.__item._meta = {'expire': expire or Cache.DEFAULT_EXPIRE_TIMEOUT}
+            cls.__item._path = path or Cache.DEFAULT_CACHE_PATH
+            cls.__item._cache = {}
 
-    def __init__(self, path: Optional[Path] = None, expire: Optional[int] = None):
-        self._meta = {'expire': expire or Cache.DEFAULT_EXPIRE_TIMEOUT}
-        self._cache = {}
-        self._path = path or Cache.DEFAULT_CACHE_PATH
+        return cls.__item
 
     def __getitem__(self, item):
         return self._cache[item]
@@ -50,6 +50,23 @@ class Cache:
 
         self._cache[key] = value
 
+    def __contains__(self, item):
+        return item in self._cache
+
+    @classmethod
+    def init(cls, fake: bool = False):
+        """Init cache singleton and load data if not fake"""
+        cache = cls()
+        if not fake:
+            with suppress(CacheEmpty):
+                cache._load()
+
+    @classmethod
+    def dump(cls):
+        """Dump cache"""
+        cache = cls()
+        cache._dump()
+
     def load(self) -> bool:
         """Load cache from file if self cache does not exist"""
         return bool(self._cache) or self._load()
@@ -58,13 +75,11 @@ class Cache:
         """Try to reload cache"""
         return self._load()
 
-    def dump(self):
-        """Dump cache if exists to file in json format"""
-        if not self._cache:
-            raise CacheEmpty('Cache empty')
-
+    def _dump(self):
+        """Dump cache to file in json format"""
         with open(self._path, 'w', encoding='utf-8') as cache_file:
-            self._meta['timestamp'] = time.time()
+            if 'timestamp' not in self._meta:
+                self._meta['timestamp'] = time.time()
             json.dump({'meta': self._meta, 'data': self._cache}, cache_file)
 
     def _load(self) -> bool:

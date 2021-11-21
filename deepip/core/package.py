@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
-import requests
 from pkg_resources import Distribution
 
-from deepip.core.api.pypi_api import get_pypi_package_info
 from deepip.core.requirement import RequirementInfo
 
 
@@ -22,10 +20,11 @@ class Package:
 
     _package: Optional[Distribution] = None
     ref_counter: int
-    meta: Optional[dict] = None
+    meta: dict
 
     def __init__(self, package: Distribution):
         self._package = package
+        self.meta = {}
 
         if package.key in self.__all_packages:
             raise Exception(f'Package {package.key} already exists')
@@ -52,13 +51,6 @@ class Package:
     def version(self) -> str:
         """Return installed package version"""
         return self._package.version
-
-    def load_meta(self) -> None:
-        """Load meta information from remote server"""
-        try:
-            self.meta = get_pypi_package_info(self.name)
-        except requests.exceptions.HTTPError:
-            self.meta = {}
 
     def latest_version(self) -> Optional[str]:
         """Return latest version for package"""

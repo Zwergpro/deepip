@@ -1,12 +1,15 @@
 import sys
 
+from deepip.core.api.cache import Cache
 from deepip.core.views import SimpleView
 from deepip.core.builders import build_dep_tree
 
 
 def tree_command_handler(args):
     """Handle tree cli command"""
+    Cache.init()
     root = build_dep_tree(with_meta=args.latest)
+    Cache.dump()
 
     if args.package:
         node = root.get_child_by_name(args.package)
