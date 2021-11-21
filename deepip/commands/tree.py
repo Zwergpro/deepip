@@ -9,7 +9,7 @@ def tree_command_handler(args):
     root = build_dep_tree(with_meta=args.latest)
 
     if args.package:
-        node = root.get_child(args.package)
+        node = root.get_child_by_name(args.package)
         if node:
             SimpleView(node, show_version=args.version).show()
             return

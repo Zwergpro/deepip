@@ -60,14 +60,14 @@ def test_parent_node_has_child(root):
 
 
 def test_node_without_children_try_to_get_child_by_name(root):
-    assert root.get_child('test_name') is None, 'can not get child from node without children'
+    assert root.get_child_by_name('test_name') is None, 'can not get child from node without children'
 
 
 def test_node_with_children_try_to_get_child_by_name(root):
     root.add_child(Package(package_factory()))
     child = root.add_child(Package(package_factory()))
 
-    assert root.get_child(child.name) == child, 'node with children should return child node'
+    assert root.get_child_by_name(child.name) == child, 'node with children should return child node'
 
 
 def test_node_version_without_requirement(root):

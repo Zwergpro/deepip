@@ -54,6 +54,6 @@ def test_builder_with_sub_tree(working_set_mock):
 
     root = build_dep_tree()
 
-    parent_node = root.get_child(main_package.key)
-    child_node = root.get_child(required_package.key)
-    assert parent_node.get_child(child_node.name) is not None, 'parent node should contain required child node'
+    parent_node = root.get_child_by_name(main_package.key)
+    child_node = root.get_child_by_name(required_package.key)
+    assert parent_node.get_child_by_name(child_node.name) is not None, 'parent node should contain required child node'

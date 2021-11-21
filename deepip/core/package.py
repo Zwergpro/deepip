@@ -1,9 +1,10 @@
+from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
 import requests
 from pkg_resources import Distribution
 
-from deepip.core.pypi_api import get_pypi_package_info
+from deepip.core.api.pypi_api import get_pypi_package_info
 from deepip.core.requirement import RequirementInfo
 
 
@@ -32,6 +33,26 @@ class Package:
         self.__all_packages[package.key] = self
         self.ref_counter = 0
 
+    @classmethod
+    def flush_storage(cls):
+        """Flush global Package storage"""
+        cls.__all_packages = {}
+
+    @classmethod
+    def get_global_storage_copy(cls) -> Dict[str, 'Package']:
+        """Return copy of Package global storage"""
+        return cls.__all_packages.copy()
+
+    @property
+    def name(self) -> str:
+        """Return package name"""
+        return self._package.key
+
+    @property
+    def version(self) -> str:
+        """Return installed package version"""
+        return self._package.version
+
     def load_meta(self) -> None:
         """Load meta information from remote server"""
         try:
@@ -55,11 +76,6 @@ class Package:
             requirements.append((self.__all_packages[requirement.key], RequirementInfo(requirement)))
         return requirements
 
-    @property
-    def name(self) -> str:
-        """Return package name"""
-        return self._package.key
-
     def incr_ref_counter(self):
         """
         Increment package reference counter.
@@ -73,17 +89,15 @@ class Package:
         """
         self.ref_counter += 1
 
-    @property
-    def version(self) -> str:
-        """Return installed package version"""
-        return self._package.version
 
-    @classmethod
-    def flush_storage(cls):
-        """Flush global Package storage"""
-        cls.__all_packages = {}
+@dataclass
+class PackageVersion:
+    """Encapsulate package versions"""
 
-    @classmethod
-    def get_global_storage_copy(cls) -> Dict[str, 'Package']:
-        """Return copy of Package global storage"""
-        return cls.__all_packages.copy()
+    installed: Optional[str] = None
+    specifier: Optional[str] = None
+    latest: Optional[str] = None
+
+    def as_dict(self) -> dict:
+        """Exclude None versions and return dict representation"""
+        return {key: value for key, value in self.__dict__.items() if value is not None}
