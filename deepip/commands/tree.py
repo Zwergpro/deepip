@@ -7,7 +7,7 @@ from deepip.core.builders import build_dep_tree
 
 def tree_command_handler(args):
     """Handle tree cli command"""
-    Cache.init()
+    Cache.init(fake=args.no_cache)
     root = build_dep_tree(with_meta=args.latest)
     Cache.dump()
 
@@ -46,4 +46,11 @@ def init_tree_subcommand(subparsers):
         '--latest',
         action='store_true',
         help='Show latest available lib version',
+    )
+
+    tree.add_argument(
+        '--no-cache',
+        dest='no_cache',
+        action='store_true',
+        help="Don't use cache",
     )

@@ -1,3 +1,4 @@
+import sys
 import time
 from contextlib import suppress
 from pathlib import Path
@@ -98,4 +99,5 @@ class Cache:
         self._meta = cache['meta']
         self._cache = cache['data']
 
+        sys.stdout.write('Cache used!\n')
         return bool(self._cache)
