@@ -1,15 +1,18 @@
 import sys
 
+from deepip.core.api.cache import Cache
 from deepip.core.views import SimpleView
 from deepip.core.builders import build_dep_tree
 
 
 def tree_command_handler(args):
     """Handle tree cli command"""
-    root = build_dep_tree()
+    Cache.init(fake=args.no_cache)
+    root = build_dep_tree(with_meta=args.latest)
+    Cache.dump()
 
     if args.package:
-        node = root.get_child(args.package)
+        node = root.get_child_by_name(args.package)
         if node:
             SimpleView(node, show_version=args.version).show()
             return
@@ -36,4 +39,18 @@ def init_tree_subcommand(subparsers):
         '--version',
         action='store_true',
         help='Show package version information',
+    )
+
+    tree.add_argument(
+        '-l',
+        '--latest',
+        action='store_true',
+        help='Show latest available lib version',
+    )
+
+    tree.add_argument(
+        '--no-cache',
+        dest='no_cache',
+        action='store_true',
+        help="Don't use cache",
     )
