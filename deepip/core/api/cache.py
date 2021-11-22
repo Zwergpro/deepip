@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 from contextlib import suppress
@@ -10,12 +11,16 @@ class CacheKeyError(Exception):
     """Error with cache key"""
 
 
-class CacheAlreadyExists(Exception):
+class CacheAlreadyExistsError(Exception):
     """Information already exists in cache"""
 
 
-class CacheEmpty(Exception):
+class CacheEmptyError(Exception):
     """There is nothing in cache"""
+
+
+class CachePathError(Exception):
+    """Invalid cache path"""
 
 
 class Cache:
@@ -23,6 +28,9 @@ class Cache:
 
     DEFAULT_EXPIRE_TIMEOUT: int = 60 * 60 * 24  # 1 day
     DEFAULT_CACHE_PATH: Path = Path('/tmp/.deepip_cache')
+
+    CACHE_EXPIRE_ENV_KEY = 'DEEPIP_CACHE_EXPIRE'
+    CACHE_PATH_ENV_KEY = 'DEEPIP_CACHE_PATH'
 
     _path: Path
     _cache: dict
@@ -33,8 +41,9 @@ class Cache:
     def __new__(cls, path: Optional[Path] = None, expire: Optional[int] = None):
         if cls.__item is None:
             cls.__item = super().__new__(cls)
-            cls.__item._meta = {'expire': expire or Cache.DEFAULT_EXPIRE_TIMEOUT}
-            cls.__item._path = path or Cache.DEFAULT_CACHE_PATH
+            cls.__item._path = path or os.getenv(Cache.CACHE_PATH_ENV_KEY) or Cache.DEFAULT_CACHE_PATH
+            expire_timeout = expire or os.getenv(Cache.CACHE_EXPIRE_ENV_KEY) or Cache.DEFAULT_EXPIRE_TIMEOUT
+            cls.__item._meta = {'expire': expire_timeout}
             cls.__item._cache = {}
 
         return cls.__item
@@ -47,7 +56,7 @@ class Cache:
             raise CacheKeyError(f'Cache key should be str, not {type(key)}')
 
         if key in self._cache:
-            raise CacheAlreadyExists(f'{key} already exists in cache')
+            raise CacheAlreadyExistsError(f'{key} already exists in cache')
 
         self._cache[key] = value
 
@@ -55,11 +64,11 @@ class Cache:
         return item in self._cache
 
     @classmethod
-    def init(cls, fake: bool = False):
+    def init(cls, *args, fake: bool = False, **kwargs):
         """Init cache singleton and load data if not fake"""
-        cache = cls()
+        cache = cls(*args, **kwargs)
         if not fake:
-            with suppress(CacheEmpty):
+            with suppress(CacheEmptyError):
                 cache._load()
 
     @classmethod
@@ -67,6 +76,16 @@ class Cache:
         """Dump cache"""
         cache = cls()
         cache._dump()
+
+    @staticmethod
+    def convert_to_cache_file(row_path: str) -> Path:
+        """Convert string to path to cache file"""
+        path = Path(row_path)
+        if path.is_file():
+            return path
+        if path.is_dir():
+            return path / '.deepip_cache'
+        raise CachePathError('Cache path should be file or directory')
 
     def load(self) -> bool:
         """Load cache from file if self cache does not exist"""
@@ -86,15 +105,17 @@ class Cache:
     def _load(self) -> bool:
         """Try to load cache from file if it doesn't expired'"""
         if not self._path.exists():
-            raise CacheEmpty('Cache does not exists')
+            raise CacheEmptyError('Cache does not exists')
 
         with open(self._path, 'r', encoding='utf-8') as cache_file:
             cache = json.load(cache_file)
 
         meta = cache['meta']
-        if time.time() > meta['timestamp'] + meta['expire']:
+        expire_changed = meta['expire'] != self._meta['expire']
+        cache_expired = time.time() > meta['timestamp'] + meta['expire']
+        if expire_changed or cache_expired:
             self._path.unlink(missing_ok=True)
-            raise CacheEmpty('Timeout expired')
+            raise CacheEmptyError('Timeout expired')
 
         self._meta = cache['meta']
         self._cache = cache['data']

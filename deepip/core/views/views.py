@@ -31,10 +31,18 @@ class SimpleView:
 
         if version.specifier is None:
             if version.latest:
-                return f'({version.installed} latest: {version.latest})'  # top level package
+                latest_version = version.latest
+                if version.installed != latest_version:
+                    latest_version = Color.fill(latest_version, Color.CYELLOW2)
+                return f'({version.installed}, latest: {latest_version})'  # top level package
+
             return f'({version.installed})'
 
-        version_info = ', '.join(f'{key}: {value}' for key, value in version.as_dict().items())
+        version_specification = version.as_dict()
+        if version.latest and version.latest != version.installed:
+            version_specification['latest'] = Color.fill(version.latest, Color.CYELLOW2)
+
+        version_info = ', '.join(f'{key}: {value}' for key, value in version_specification.items())
         return f'[{version_info}]'
 
     def _print_package_info(self, node: DepNode) -> None:
