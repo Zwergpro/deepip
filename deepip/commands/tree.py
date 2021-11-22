@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 from deepip.core.api.cache import Cache
 from deepip.core.views import SimpleView
@@ -7,7 +8,7 @@ from deepip.core.builders import build_dep_tree
 
 def tree_command_handler(args):
     """Handle tree cli command"""
-    Cache.init(fake=args.no_cache)
+    Cache.init(fake=args.no_cache, path=args.cache_path, expire=args.cache_expire)
     root = build_dep_tree(with_meta=args.latest)
     Cache.dump()
 
@@ -53,4 +54,20 @@ def init_tree_subcommand(subparsers):
         dest='no_cache',
         action='store_true',
         help="Don't use cache",
+    )
+
+    tree.add_argument(
+        '--cache-path',
+        dest='cache_path',
+        type=Cache.convert_to_cache_file,
+        default=None,
+        help='Specify cache path',
+    )
+
+    tree.add_argument(
+        '--cache-expire',
+        dest='cache_expire',
+        type=int,
+        default=None,
+        help='Specify cache expire timeout',
     )
