@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 
 from deepip.core.api.cache import Cache
 from deepip.core.views import SimpleView
